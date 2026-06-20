@@ -29,7 +29,7 @@ export class App {
   async onSubmitForm(customer: Customer) {
     this.question.update(
       (_) =>
-        `Yo soy de ${customer.country}, tengo ${customer.age} años de edad, estoy ${customer.maritalStatus === 'Married' ? 'Casado' : 'Soltero'}, mi salario actual es de ${customer.salary}`,
+        `Yo soy de ${customer.country}, tengo ${customer.age} años de edad, estoy ${customer.maritalStatus === 'Married' ? 'Casado' : 'Soltero'}, mi salario actual es de $${customer.salary}`,
     );
 
     this.image.set('thinking');
