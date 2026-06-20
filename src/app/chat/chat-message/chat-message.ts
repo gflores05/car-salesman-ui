@@ -5,7 +5,7 @@ import { NgClass } from '@angular/common';
   selector: 'chat-message',
   template: `
     <div
-      class="rounded-md w-3/5 p-4"
+      class="rounded-md w-4/5 p-4"
       [ngClass]="{
         'bg-sky-100': direction() === 'sender',
         'bg-violet-100 justify-self-end': direction() === 'receiver',
