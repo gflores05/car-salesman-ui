@@ -1,6 +1,5 @@
 import { Service } from '@angular/core';
 import { Customer } from '../models/customer';
-import axios from 'axios';
 import { Observable } from 'rxjs';
 
 @Service()
@@ -18,7 +17,7 @@ export class CarSalesmanService {
         }),
       });
 
-      return new Observable((subscriber) => {
+      return new Observable<string>((subscriber) => {
         if (!response.body) {
           return;
         }
@@ -27,7 +26,6 @@ export class CarSalesmanService {
         const decoder = new TextDecoder();
 
         function readNext() {
-          console.log('reading next chunk');
           reader.read().then(({ value, done }) => {
             const chunkText = decoder.decode(value, { stream: true });
             subscriber.next(chunkText);

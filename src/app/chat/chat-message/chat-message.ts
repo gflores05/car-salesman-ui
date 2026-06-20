@@ -11,9 +11,11 @@ import { NgClass } from '@angular/common';
         'bg-violet-100 justify-self-end': direction() === 'receiver',
       }"
     >
-      @if (text()) {
-        <p class="text-lg text-zinc-700 text-left">{{ text() }}</p>
-      }
+      <p>
+        @for (text of content(); track $index) {
+          <span class="text-lg text-zinc-700 text-left">{{ text }}</span>
+        }
+      </p>
       <ng-content />
     </div>
   `,
@@ -21,5 +23,5 @@ import { NgClass } from '@angular/common';
 })
 export class ChatMessage {
   direction = input('sender');
-  text = input('');
+  content = input<string[]>([]);
 }

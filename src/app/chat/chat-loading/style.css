@@ -1,0 +1,37 @@
+.loading{
+  height: 20px;
+  width: 84px;
+  gap: 8px;
+  display: flex;
+  justify-content: space-around;
+  margin: 8px auto
+}
+
+.loading-circle {
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 100%;
+  animation: loading1 3s infinite;
+}
+
+.circle1 {
+  animation-delay: 0;
+}
+
+.circle2 {
+  animation-delay: 1s;
+}
+
+.circle3 {
+  animation-delay: 2s;
+}
+
+@keyframes loading1 {
+  from {
+    background-color: #eee;
+  }
+  to {
+    background-color: #ccc;
+  }
+}

@@ -1,22 +1,21 @@
 <main class="flex w-full h-full max-h-screen justify-center place-content-center">
   <div class="h-full max-h-screen flex w-3/5 py-4">
     <div class="flex min-w-xs basis-1/3">
-      <img src="images/smiling.png" style="max-height: fit-content;" alt="salesman" />
+      <img [src]="`images/${image()}.png`" style="max-height: fit-content;" alt="salesman" />
     </div>
     <div class="flex flex-col text-center basis-2/3 max-h-screen">
-      <chat-container class="max-h-screen">
-        <chat-message [direction]="'sender'" [text]="'Hola! Soy Gabriel, tu vendedor de autos de confianza. Para elegir el automóvil perfecto para ti primero necesito que me cuentes un poco de ti. Podrias brindarme la siguiente información por favor?'">
+      <chat-container class="max-h-screen" [loading]="loading()" [messagesSubject]="messageSubject">
+        <chat-message [direction]="'sender'" [content]="['Hola! Soy Gabriel, tu vendedor de autos de confianza. Para elegir el automóvil perfecto para ti primero necesito que me cuentes un poco de ti. Podrias brindarme la siguiente información por favor?']">
         <customer-form (onCompleteForm)="this.onSubmitForm($event)" />
         </chat-message>
-        @if (question()) {
-          <chat-message [direction]="'receiver'" [text]="question()"/>
+        @if (question().length) {
+          <chat-message [direction]="'receiver'" [content]="[question()]"/>
         }
-        @if (response()) {
-          <chat-message [direction]="'sender'" [text]="response()"/>
+        @if (response().length) {
+          <chat-message [direction]="'sender'" [content]="response()"/>
         }
       </chat-container>
     </div>
-    <!-- <div class="flex w-full"></div> -->
   </div>
 </main>
 

@@ -5,7 +5,7 @@ import { ChatMessage } from './chat/chat-message/chat-message';
 import { CustomerForm } from './customer-form/customer-form';
 import { Customer } from './models/customer';
 import { CarSalesmanService } from './services/car-salesman-service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,27 +16,40 @@ import { Subscription } from 'rxjs';
 export class App {
   protected readonly title = signal('Car Salesman AI');
 
+  image = signal('smiling');
   question = signal('');
-  response = signal('');
+  response = signal<string[]>([]);
+  loading = signal(false);
 
-  private sub!: Subscription;
+  messageSubscription!: Subscription;
+  messageSubject = new Subject<string>();
 
   carSalesmanService = inject(CarSalesmanService);
 
   async onSubmitForm(customer: Customer) {
     this.question.update(
       (_) =>
-        `Yo soy de ${customer.country}, tengo ${customer.age} años de edad, estoy ${customer.maritalStatus}, mi salario actual es de ${customer.salary}`,
+        `Yo soy de ${customer.country}, tengo ${customer.age} años de edad, estoy ${customer.maritalStatus === 'Married' ? 'Casado' : 'Soltero'}, mi salario actual es de ${customer.salary}`,
     );
 
-    this.sub = (await this.carSalesmanService.ask(customer)).subscribe({
+    this.image.set('thinking');
+    this.loading.set(true);
+
+    this.messageSubscription = (await this.carSalesmanService.ask(customer)).subscribe({
       next: (chunk) => {
-        this.response.update((r) => r + chunk);
+        this.messageSubject.next(chunk);
+        this.image.set('idea');
+        this.loading.set(false);
+        this.response.update((r) => [...r, chunk]);
       },
     });
   }
 
+  isNumeric(str: string) {
+    return str.trim() !== '' && !isNaN(Number(str));
+  }
+
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe(); // Clean up resource
+    if (this.messageSubscription) this.messageSubscription.unsubscribe();
   }
 }
