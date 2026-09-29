@@ -1,18 +1,21 @@
 import { Component, ElementRef, input, ViewChild } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { ChatLoading } from '../chat-loading/chat-loading';
+import { ZardMessageImports } from '@/shared/components/message';
+import { ZardSpinnerComponent } from '@/shared/components/spinner';
 
 @Component({
   selector: 'chat-container',
-  imports: [ChatLoading],
+  imports: [ZardMessageImports, ZardSpinnerComponent],
   template: `
     <div
       #chatContainer
-      class="flex flex-col rounded-2xl border border-gray-200 p-8 gap-4 my-4 h-full max-h-9/10 overflow-y-scroll"
+      class="bg-card flex flex-col rounded-xl border p-6 gap-6 my-4 h-full max-h-9/10 overflow-y-auto"
     >
       <ng-content />
       @if (loading()) {
-        <chat-loading />
+        <z-message zVariant="muted">
+          <z-spinner class="size-5" />
+        </z-message>
       }
     </div>
   `,
@@ -33,7 +36,6 @@ export class ChatContainer {
   ngOnChanges() {
     if (this.messagesSubject() && !this.messageSubscription) {
       this.messageSubscription = this.messagesSubject()!.subscribe((_) => {
-        console.log('scrolling');
         this.scrollToBottom();
       });
     }

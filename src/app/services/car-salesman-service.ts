@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class CarSalesmanService {
   async ask(customer: Customer) {
     try {
-      const response = await fetch('http://localhost:8000/ask', {
+      const response = await fetch('http://localhost:8002/ask', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

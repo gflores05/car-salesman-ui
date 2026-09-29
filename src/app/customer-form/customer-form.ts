@@ -1,47 +1,78 @@
 import { Component, output, signal } from '@angular/core';
-import { InputGroup } from '../shared/input-group/input-group';
 import { form, FormField, min, required } from '@angular/forms/signals';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardComboboxComponent, ZardComboboxOption } from '@/shared/components/combobox';
+import { ZardFieldImports } from '@/shared/components/field';
+import { ZardInputComponent } from '@/shared/components/input';
+import { ZardSelectImports } from '@/shared/components/select';
 import { Countries, Customer } from '../models/customer';
 
 @Component({
   selector: 'customer-form',
-  imports: [InputGroup, FormField],
-  template: `<div class="flex flex-col justify-items-start">
-    <input-group label="Pais">
-      <select [formField]="customerForm.country" class="p-2 bg-white rounded-lg">
-        @for (country of countries; track country) {
-          <option value="{{ country }}">{{ country }}</option>
-        }
-      </select>
-    </input-group>
-    <input-group label="Edad">
-      <input class="p-2 bg-white rounded-lg" type="number" [formField]="customerForm.age" />
-    </input-group>
-    <input-group label="Estado civil">
-      <select class="p-2 bg-white rounded-lg">
-        <option value="Soltero">Soltero</option>
-        <option value="Casado">Casado</option>
-      </select>
-    </input-group>
-    <input-group label="Salario">
+  imports: [
+    FormField,
+    ZardButtonComponent,
+    ZardComboboxComponent,
+    ZardFieldImports,
+    ZardInputComponent,
+    ZardSelectImports,
+  ],
+  template: `<div z-field-group class="text-left">
+    @let age = customerForm.age();
+    @let ageInvalid = age.invalid() && age.touched();
+
+    <div z-field>
+      <label z-field-label for="customer-country">País</label>
+      <z-combobox
+        id="customer-country"
+        zWidth="full"
+        [options]="countryOptions"
+        [formField]="customerForm.country"
+        placeholder="Selecciona un país"
+        searchPlaceholder="Buscar país..."
+        emptyText="País no encontrado."
+      />
+    </div>
+    <div z-field [attr.data-invalid]="ageInvalid || null">
+      <label z-field-label for="customer-age">Edad</label>
       <input
-        class="p-2 bg-white rounded-lg"
+        z-input
+        id="customer-age"
+        type="number"
+        [formField]="customerForm.age"
+        [attr.aria-invalid]="ageInvalid || null"
+      />
+      @if (ageInvalid) {
+        <z-field-error [zErrors]="age.errors()" />
+      }
+    </div>
+    <div z-field>
+      <label z-field-label for="customer-marital-status">Estado civil</label>
+      <z-select id="customer-marital-status" [formField]="customerForm.maritalStatus">
+        <z-select-item zValue="Single">Soltero</z-select-item>
+        <z-select-item zValue="Married">Casado</z-select-item>
+      </z-select>
+    </div>
+    <div z-field>
+      <label z-field-label for="customer-salary">Salario</label>
+      <input
+        z-input
+        id="customer-salary"
         type="number"
         step="0.01"
         [formField]="customerForm.salary"
       />
-    </input-group>
-    <button
-      class="px-4 py-2 bg-sky-800 rounded-lg text-gray-50 mt-4 cursor-pointer hover:bg-sky-600"
-      type="button"
-      (click)="submitForm()"
-    >
+    </div>
+    <button z-button type="button" [zDisabled]="customerForm().invalid()" (click)="submitForm()">
       Enviar
     </button>
   </div>`,
 })
 export class CustomerForm {
-  countries = Countries;
+  countryOptions: ZardComboboxOption[] = Countries.map((country) => ({
+    value: country,
+    label: country,
+  }));
 
   onCompleteForm = output<Customer>();
   customerModel = signal<Customer>({

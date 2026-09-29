@@ -56,7 +56,6 @@ export const Countries = [
   'Eritrea',
   'Estonia',
   'Eswatini',
-  'Switzerland',
   'Ethiopia',
   'Fiji',
   'Finland',

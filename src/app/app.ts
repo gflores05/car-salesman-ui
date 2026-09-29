@@ -1,17 +1,25 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ChatContainer } from './chat/chat-container/chat-container';
-import { ChatMessage } from './chat/chat-message/chat-message';
 import { CustomerForm } from './customer-form/customer-form';
 import { Customer } from './models/customer';
 import { CarSalesmanService } from './services/car-salesman-service';
 import { Subject, Subscription } from 'rxjs';
+import { ZardBubbleImports } from '@/shared/components/bubble';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardMessageImports } from '@/shared/components/message';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ChatContainer, ChatMessage, CustomerForm],
+  imports: [
+    RouterOutlet,
+    ChatContainer,
+    CustomerForm,
+    ZardBubbleImports,
+    ZardCardImports,
+    ZardMessageImports,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Car Salesman AI');
